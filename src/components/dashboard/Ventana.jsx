@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { addTask } from "@/services/addtask";
 
 function Ventana({ verVentana, setVerVentana }) {
@@ -8,7 +8,8 @@ function Ventana({ verVentana, setVerVentana }) {
   const [nombreLocal, setNombreLocal] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Asegúrate de prevenir el comportamiento por defecto del formulario
+    console.log("ENTREEEe");
 
     const data = {
       nombreProducto,
@@ -17,17 +18,16 @@ function Ventana({ verVentana, setVerVentana }) {
       nombreLocal,
     };
 
+    console.log("Datos del formulario:", data);
+
     try {
-      await addTask(data); // Llama a la función para añadir la tarea
-      console.log("Tarea enviada correctamente");
+      await addTask(data); // Llama a la función para agregar la tarea y enviar la notificación
+      console.log("Tarea añadida y notificación enviada con éxito");
     } catch (error) {
-      console.error("Error al enviar la tarea:", error);
+      console.error("Error al añadir la tarea o enviar la notificación:", error);
     }
 
-
-
-    // Cerrar la ventana después de enviar
-    setVerVentana(!verVentana);
+    // setVerVentana(!verVentana); // descaomentar esto para cerrar la ventana
   };
 
   return (
@@ -41,7 +41,7 @@ function Ventana({ verVentana, setVerVentana }) {
             x
           </span>
         </header>
-        <form onSubmit={handleSubmit}>
+        <div>
           <div className="flex flex-col gap-3">
             <label>Nombre producto</label>
             <input
@@ -79,11 +79,14 @@ function Ventana({ verVentana, setVerVentana }) {
             />
           </div>
           <div className="mt-4 flex justify-end">
-            <button type="submit" className="bg-black text-white py-3 px-5 rounded-lg">
+            <button
+              onClick={handleSubmit}
+              className="bg-black text-white py-3 px-5 rounded-lg"
+            >
               Enviar
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

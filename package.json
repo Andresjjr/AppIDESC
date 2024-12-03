@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/messaging": "^0.12.14",
     "firebase": "^11.0.2",
-    "firebase-admin": "^13.0.0",
+    "firebase-admin": "^13.0.1",
     "next": "14.2.11",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-toastify": "^10.0.6"
   },
   "devDependencies": {
     "eslint": "^8",

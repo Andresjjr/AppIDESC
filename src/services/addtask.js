@@ -1,13 +1,16 @@
-import { ref, set, push } from "firebase/database";
-import { db } from "./firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export const addTask = async (task) => {
   try {
-    const tasksRef = ref(db, "tareas"); // Referencia a la tabla tareas
-    const newTaskRef = push(tasksRef); // Crea un nuevo registro con un ID único
-    await set(newTaskRef, task); // Añade la tarea a la base de datos
+    // Verifica que db sea una instancia válida
+    if (!db) {
+      throw new Error("Firestore no está inicializado correctamente.");
+    }
 
-    console.log("Tarea añadida con ID:", newTaskRef.key);
+    // Agrega un nuevo documento a la colección "tareas"
+    const docRef = await addDoc(collection(db, "tareas"), task);
+    console.log("Tarea añadida con ID:", docRef.id);
   } catch (error) {
     console.error("Error al añadir la tarea:", error);
   }
