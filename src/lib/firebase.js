@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getAnalytics, isSupported } from "firebase/analytics";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";  // Importa los servicios necesarios
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQeJAxlVe5MFuI4Oh1-5KuIKC0L7tK5pQ",
@@ -28,4 +29,32 @@ if (typeof window !== "undefined") {
   });
 }
 
+// Configurar Firebase Messaging
+const messaging = getMessaging(app);
+
+// Obtener el token FCM del dispositivo
+export const getFCMToken = async () => {
+  try {
+    const currentToken = await getToken(messaging, {
+      vapidKey: 'YOUR_VAPID_KEY'  // Aquí debes colocar la clave VAPID que obtuviste en la configuración de Firebase.
+    });
+
+    if (currentToken) {
+      console.log('FCM Token:', currentToken);
+      // Aquí puedes enviar este token a tu servidor para almacenarlo y poder enviar notificaciones
+    } else {
+      console.log('No se pudo obtener el token FCM');
+    }
+  } catch (error) {
+    console.error('Error obteniendo el token FCM:', error);
+  }
+};
+
+// Manejar la recepción de mensajes cuando la app está en primer plano
+onMessage(messaging, (payload) => {
+  console.log('Mensaje recibido en primer plano:', payload);
+  // Aquí puedes mostrar la notificación en pantalla o manejar la lógica necesaria
+});
+
 export default app;
+

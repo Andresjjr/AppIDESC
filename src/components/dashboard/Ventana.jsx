@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import { addTask } from "@/services/addtask";
 
 function Ventana({ verVentana, setVerVentana }) {
+  const [nombreProducto, setNombreProducto] = useState("");
+  const [marca, setMarca] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [nombreLocal, setNombreLocal] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      nombreProducto,
+      marca,
+      direccion,
+      nombreLocal,
+    };
+
+    try {
+      await addTask(data); // Llama a la función para añadir la tarea
+      console.log("Tarea enviada correctamente");
+    } catch (error) {
+      console.error("Error al enviar la tarea:", error);
+    }
+
+
+
+    // Cerrar la ventana después de enviar
+    setVerVentana(!verVentana);
+  };
+
   return (
     <div className="bg-[rgba(0,0,0,0.37)] h-screen w-screen fixed top-0 left-0 z-50 flex justify-center items-center">
       <div className="bg-white rounded-lg p-5 min-w-[80%] max-h-[85%] min-h-[50%] overflow-auto">
@@ -12,29 +41,49 @@ function Ventana({ verVentana, setVerVentana }) {
             x
           </span>
         </header>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-3">
-            <label htmlFor="">Nombre producto</label>
-            <input type="text" className="border border-black rounded-lg p-1" />
+            <label>Nombre producto</label>
+            <input
+              type="text"
+              value={nombreProducto}
+              onChange={(e) => setNombreProducto(e.target.value)}
+              className="border border-black rounded-lg p-1"
+            />
           </div>
           <div className="flex flex-col gap-3">
-            <label htmlFor="">Marca</label>
-            <input type="text" className="border border-black rounded-lg p-1" />
+            <label>Marca</label>
+            <input
+              type="text"
+              value={marca}
+              onChange={(e) => setMarca(e.target.value)}
+              className="border border-black rounded-lg p-1"
+            />
           </div>
           <div className="flex flex-col gap-3">
-            <label htmlFor="">direccion</label>
-            <input type="text" className="border border-black rounded-lg p-1" />
+            <label>Dirección</label>
+            <input
+              type="text"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+              className="border border-black rounded-lg p-1"
+            />
           </div>
           <div className="flex flex-col gap-3">
-            <label htmlFor="">Nombre local</label>
-            <input type="text" className="border border-black rounded-lg p-1" />
+            <label>Nombre local</label>
+            <input
+              type="text"
+              value={nombreLocal}
+              onChange={(e) => setNombreLocal(e.target.value)}
+              className="border border-black rounded-lg p-1"
+            />
+          </div>
+          <div className="mt-4 flex justify-end">
+            <button type="submit" className="bg-black text-white py-3 px-5 rounded-lg">
+              Enviar
+            </button>
           </div>
         </form>
-        <div className="mt-4 flex justify-end">
-          <button className="bg-black text-white py-3 px-5 rounded-lg">
-            enviar
-          </button>
-        </div>
       </div>
     </div>
   );

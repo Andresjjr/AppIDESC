@@ -19,12 +19,12 @@ function Page() {
           </div>
           <nav className="flex justify-center gap-5 flex-wrap">
             <div>Menu</div>
-            <div onClick={() => setVerVentana(!verVentana)}>opcion2</div>
+            <div onClick={() => setVerVentana(!verVentana)}>Nueva tarea</div>
             <LogOut/>
           </nav>
         </header>
         <div className="bg-blue-300">
-          tablas correos
+          Notificaciones
           <div className="bg-yellow-200">
             <div
               className="bg-red-300"
