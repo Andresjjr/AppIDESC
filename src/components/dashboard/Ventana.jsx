@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { addTask } from "@/services/addtask";
+import { getTokens } from "@/services/getTokens";
+import { enviarNotificacion } from "@/services/enviarNotificacion";
 
 function Ventana({ verVentana, setVerVentana }) {
   const [nombreProducto, setNombreProducto] = useState("");
@@ -8,8 +10,7 @@ function Ventana({ verVentana, setVerVentana }) {
   const [nombreLocal, setNombreLocal] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Asegúrate de prevenir el comportamiento por defecto del formulario
-    console.log("ENTREEEe");
+    e.preventDefault();
 
     const data = {
       nombreProducto,
@@ -18,16 +19,30 @@ function Ventana({ verVentana, setVerVentana }) {
       nombreLocal,
     };
 
-    console.log("Datos del formulario:", data);
-
     try {
-      await addTask(data); // Llama a la función para agregar la tarea y enviar la notificación
-      console.log("Tarea añadida y notificación enviada con éxito");
+      // 1. Guarda la tarea
+      await addTask(data);
+      console.log('Tarea añadida con éxito.');
+
+      // 2. Obtén los tokens registrados
+      const tokens = await getTokens();
+      if (tokens.length === 0) {
+        console.log('No se enviaron notificaciones porque no hay tokens registrados.');
+      } else {
+        // 3. Envía la notificación
+        const message = {
+          title: 'Tarea creada',
+          body: `Se ha creado la tarea: ${nombreProducto}`,
+        };
+        await enviarNotificacion(tokens.map((t) => t.token), message);
+        console.log('Notificaciones enviadas con éxito.');
+      }
     } catch (error) {
-      console.error("Error al añadir la tarea o enviar la notificación:", error);
+      console.error('Error:', error);
     }
 
-    // setVerVentana(!verVentana); // descaomentar esto para cerrar la ventana
+    // Cierra la ventana después de la acción
+    setVerVentana(!verVentana);
   };
 
   return (

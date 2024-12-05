@@ -1,19 +1,28 @@
-'use client';
+'use client'
 
+import { useEffect } from "react";
+import { initializeFirebase } from "@/lib/firebase-setup";
 import { useState } from 'react';
 import BotonLogin from '@/components/auth/BotonLogin';
-import logo from '@/public/logo.webp'
+import { requestPermission } from "@/config/requestPermission";
+import { registerServiceWorker } from "@/utils/registerServiceWorker";
 
 export default function LoginPage() {
   const [correo_usuario, setCorreoUsuario] = useState('');
   const [password_usuario, setContraseñaUsuario] = useState('');
   const [mensaje, setMensaje] = useState('');
 
+  useEffect(() => {
+    registerServiceWorker();
+    initializeFirebase();
+    requestPermission();
+  }, []);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-lg">
-        <div className="flex justify-center mb-6">
-        <img src={logo.src} alt="Logo" className="w-24 h-auto" />
+        <div className="flex justify-center mb-6">\
+          LOGO
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Iniciar sesión (Solo Administradores)
