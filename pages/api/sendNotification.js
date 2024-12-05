@@ -1,4 +1,3 @@
-// pages/api/sendNotification.js
 import { admin } from '@/config/firebaseAdmin';
 
 export default async function handler(req, res) {
@@ -23,6 +22,10 @@ export default async function handler(req, res) {
         title: message.title,
         body: message.body,
       },
+      data: {
+        key1: "value1", // Puedes agregar datos adicionales aquí
+        key2: "value2"
+      }
     };
 
     // Enviar notificaciones a múltiples dispositivos
