@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect } from "react";
 import { initializeFirebase } from "@/lib/firebase-setup";
@@ -19,21 +19,22 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-lg">
-        <div className="flex justify-center mb-6">\
-          LOGO
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
+      <div className="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 p-8 space-y-6 bg-white rounded-lg shadow-lg">
+        <div className="flex justify-center mb-6">
+          <img src="/logoProyect.webp" alt="Logo" className="w-32 h-32" />
         </div>
-        <h2 className="text-2xl font-bold text-center text-gray-900">
-          Iniciar sesión (Solo Administradores)
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-4">
+          Iniciar sesión
         </h2>
+        <p className="text-center text-gray-600 mb-6">(Solo Administradores)</p>
         <form
-          className="space-y-4"
+          className="space-y-6"
           onSubmit={(e) => {
             e.preventDefault();
           }}
         >
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
@@ -44,14 +45,14 @@ export default function LoginPage() {
               type="email"
               id="email"
               placeholder="Ingrese su correo electrónico"
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={correo_usuario}
               onChange={(e) => setCorreoUsuario(e.target.value)}
               required
             />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
@@ -62,7 +63,7 @@ export default function LoginPage() {
               type="password"
               id="password"
               placeholder="Ingrese su contraseña"
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               value={password_usuario}
               onChange={(e) => setContraseñaUsuario(e.target.value)}
               required
@@ -73,12 +74,15 @@ export default function LoginPage() {
             <label className="flex items-center">
               <input
                 type="checkbox"
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
               />
               <span className="ml-2 text-sm text-gray-600">
                 Recordarme
               </span>
             </label>
+            <a href="#" className="text-sm text-indigo-600 hover:underline">
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
 
           <BotonLogin
