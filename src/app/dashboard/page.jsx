@@ -2,25 +2,30 @@
 
 import LogOut from "@/components/dashboard/LogOut";
 import Ventana from "@/components/dashboard/Ventana";
-import { getFotos } from "@/services/getFotos";
 import { useState, useEffect } from "react";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 function Page() {
   const [verVentana, setVerVentana] = useState(false);
   const [fotos, setFotos] = useState([]);
 
   useEffect(() => {
-    const fetchFotos = async () => {
-      try {
-        const fotosData = await getFotos();
-        setFotos(fotosData);
-        console.log(fotosData);
-      } catch (error) {
-        console.error("Error al obtener fotos:", error);
-      }
-    };
+    const fotosRef = collection(db, "fotos");
+    const q = query(fotosRef, orderBy("timestamp", "desc"));
 
-    fetchFotos();
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const fotosData = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.imageUrl && data.timestamp) {
+          fotosData.push({ imageUrl: data.imageUrl, timestamp: data.timestamp.toDate().toLocaleString() });
+        }
+      });
+      setFotos(fotosData);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   return (
@@ -51,22 +56,24 @@ function Page() {
           <div className="bg-yellow-100 p-4 rounded-lg">
             <div className="bg-red-100 p-4 rounded-lg mb-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                Lista de URLs de fotos:
+                Lista de fotos:
               </h3>
-              <ul className="list-disc list-inside">
+              <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {fotos.map((foto, index) => (
                   <li key={index} className="mb-2">
                     <a
                       href={foto.imageUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
                     >
-                      {foto.imageUrl}
+                      <img
+                        src={foto.imageUrl}
+                        alt={`Foto ${index + 1}`}
+                        className="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                      />
                     </a>
-                    <span className="text-gray-600">
-                      {" "}
-                      - Fecha de subida: {foto.timestamp}
+                    <span className="text-gray-600 block mt-2 text-sm">
+                      Fecha de subida: {foto.timestamp}
                     </span>
                   </li>
                 ))}

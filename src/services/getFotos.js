@@ -1,10 +1,11 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export const getFotos = async () => {
   try {
     const fotosRef = collection(db, "fotos");
-    const querySnapshot = await getDocs(fotosRef);
+    const q = query(fotosRef, orderBy("timestamp", "desc")); // Ordena por timestamp en orden descendente
+    const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
       console.log("No hay fotos en la colección.");
