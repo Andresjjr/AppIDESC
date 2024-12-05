@@ -26,12 +26,20 @@ export default async function handler(req, res) {
     };
 
     // Enviar notificaciones a múltiples dispositivos
-    const response = await admin.messaging().sendMulticast({
+    const response = await admin.messaging().sendEachForMulticast({
       tokens: tokens,
       ...payload,
     });
 
-    res.status(200).json({ success: true, response });
+    // Retornar únicamente los datos necesarios
+    res.status(200).json({
+      success: true,
+      successCount: response.successCount,
+      failureCount: response.failureCount,
+      responses: response.responses,
+      sentMessage: message, // descomentar esto si quieres ver el mensaje en la respuesta de la api
+    });
+    
   } catch (error) {
     console.error('Error en sendNotification API:', error.message);
     res.status(500).json({ success: false, error: error.message });
